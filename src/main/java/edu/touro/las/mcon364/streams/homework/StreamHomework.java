@@ -2,7 +2,6 @@ package edu.touro.las.mcon364.streams.homework;
 
 import java.time.*;
 import java.util.*;
-import java.util.stream.*;
 
 /**
  * Homework: E-Commerce Order Analytics
@@ -37,7 +36,7 @@ public class StreamHomework {
     /**
      * Represents a customer order.
      */
-    public record Order(
+    public record CustomerOrder(
             String id,
             String customerId,
             List<OrderItem> items,
@@ -68,7 +67,7 @@ public class StreamHomework {
     // =========================================================================
     
     private final List<Product> products;
-    private final List<Order> orders;
+    private final List<CustomerOrder> customerOrders;
     
     /**
      * Constructor initializes sample data for testing.
@@ -89,17 +88,17 @@ public class StreamHomework {
         );
         
         // Create orders
-        orders = new ArrayList<>();
+        customerOrders = new ArrayList<>();
         
         // Customer C001 orders
-        orders.add(new Order("O001", "C001",
+        customerOrders.add(new CustomerOrder("O001", "C001",
             List.of(
                 new OrderItem(products.get(0), 1),  // Laptop
                 new OrderItem(products.get(2), 2)   // 2x Headphones
             ),
             LocalDate.of(2024, 1, 15), OrderStatus.DELIVERED));
         
-        orders.add(new Order("O002", "C001",
+        customerOrders.add(new CustomerOrder("O002", "C001",
             List.of(
                 new OrderItem(products.get(3), 3),  // 3x T-Shirt
                 new OrderItem(products.get(4), 2)   // 2x Jeans
@@ -107,28 +106,28 @@ public class StreamHomework {
             LocalDate.of(2024, 2, 20), OrderStatus.DELIVERED));
         
         // Customer C002 orders
-        orders.add(new Order("O003", "C002",
+        customerOrders.add(new CustomerOrder("O003", "C002",
             List.of(
                 new OrderItem(products.get(1), 1),  // Smartphone
                 new OrderItem(products.get(7), 1)   // Watch
             ),
             LocalDate.of(2024, 1, 22), OrderStatus.DELIVERED));
         
-        orders.add(new Order("O004", "C002",
+        customerOrders.add(new CustomerOrder("O004", "C002",
             List.of(
                 new OrderItem(products.get(5), 2)   // 2x Sneakers
             ),
             LocalDate.of(2024, 3, 10), OrderStatus.SHIPPED));
         
         // Customer C003 orders
-        orders.add(new Order("O005", "C003",
+        customerOrders.add(new CustomerOrder("O005", "C003",
             List.of(
                 new OrderItem(products.get(8), 1),  // Tablet
                 new OrderItem(products.get(6), 1)   // Backpack
             ),
             LocalDate.of(2024, 2, 5), OrderStatus.DELIVERED));
         
-        orders.add(new Order("O006", "C003",
+        customerOrders.add(new CustomerOrder("O006", "C003",
             List.of(
                 new OrderItem(products.get(9), 1),  // Jacket
                 new OrderItem(products.get(3), 2)   // 2x T-Shirt
@@ -136,7 +135,7 @@ public class StreamHomework {
             LocalDate.of(2024, 3, 15), OrderStatus.CANCELLED));
         
         // Customer C004 orders
-        orders.add(new Order("O007", "C004",
+        customerOrders.add(new CustomerOrder("O007", "C004",
             List.of(
                 new OrderItem(products.get(0), 2),  // 2x Laptop
                 new OrderItem(products.get(1), 1)   // Smartphone
@@ -144,7 +143,7 @@ public class StreamHomework {
             LocalDate.of(2024, 1, 30), OrderStatus.DELIVERED));
         
         // Customer C005 orders (single order)
-        orders.add(new Order("O008", "C005",
+        customerOrders.add(new CustomerOrder("O008", "C005",
             List.of(
                 new OrderItem(products.get(2), 1),  // Headphones
                 new OrderItem(products.get(3), 1),  // T-Shirt
@@ -153,14 +152,14 @@ public class StreamHomework {
             LocalDate.of(2024, 2, 28), OrderStatus.PENDING));
         
         // Customer C006 orders
-        orders.add(new Order("O009", "C006",
+        customerOrders.add(new CustomerOrder("O009", "C006",
             List.of(
                 new OrderItem(products.get(7), 2),  // 2x Watch
                 new OrderItem(products.get(6), 3)   // 3x Backpack
             ),
             LocalDate.of(2024, 3, 1), OrderStatus.DELIVERED));
         
-        orders.add(new Order("O010", "C006",
+        customerOrders.add(new CustomerOrder("O010", "C006",
             List.of(
                 new OrderItem(products.get(4), 1),  // Jeans
                 new OrderItem(products.get(9), 1)   // Jacket
@@ -329,7 +328,7 @@ public class StreamHomework {
      * 
      * Returns: Map of YearMonth → List of Orders
      */
-    public Map<YearMonth, List<Order>> getOrdersByMonth() {
+    public Map<YearMonth, List<CustomerOrder>> getOrdersByMonth() {
         // TODO: Implement using streams
         // Hint: Use YearMonth.from(order.orderDate()) as classifier
         return null;
@@ -351,7 +350,7 @@ public class StreamHomework {
      * 
      * Returns: List of orders where start <= orderDate <= end
      */
-    public List<Order> getOrdersInDateRange(LocalDate start, LocalDate end) {
+    public List<CustomerOrder> getOrdersInDateRange(LocalDate start, LocalDate end) {
         // TODO: Implement using streams
         // Hint: Filter using !isBefore(start) && !isAfter(end)
         return null;
@@ -457,7 +456,7 @@ public class StreamHomework {
         // Part 4: Time-Based Analytics
         System.out.println("\n--- PART 4: Time-Based Analytics ---");
         System.out.println("4.1 Orders by month:");
-        Map<YearMonth, List<Order>> byMonth = hw.getOrdersByMonth();
+        Map<YearMonth, List<CustomerOrder>> byMonth = hw.getOrdersByMonth();
         if (byMonth != null) {
             byMonth.forEach((month, orderList) -> 
                 System.out.printf("     %s: %d orders%n", month, orderList.size()));
@@ -467,9 +466,9 @@ public class StreamHomework {
         
         LocalDate start = LocalDate.of(2024, 2, 1);
         LocalDate end = LocalDate.of(2024, 2, 28);
-        List<Order> febOrders = hw.getOrdersInDateRange(start, end);
+        List<CustomerOrder> febCustomerOrders = hw.getOrdersInDateRange(start, end);
         System.out.printf("4.3 Orders in Feb 2024: %d%n", 
-            febOrders != null ? febOrders.size() : 0);
+            febCustomerOrders != null ? febCustomerOrders.size() : 0);
         // Expected: 3 orders
         
         System.out.println("4.4 Daily order counts: " + hw.getDailyOrderCounts());

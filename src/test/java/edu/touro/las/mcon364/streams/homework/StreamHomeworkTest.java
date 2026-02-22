@@ -156,7 +156,7 @@ class StreamHomeworkTest {
     @Test
     @DisplayName("4.1: getOrdersByMonth groups correctly")
     void testGetOrdersByMonth() {
-        Map<YearMonth, List<Order>> byMonth = hw.getOrdersByMonth();
+        Map<YearMonth, List<CustomerOrder>> byMonth = hw.getOrdersByMonth();
         assertNotNull(byMonth);
         assertEquals(3, byMonth.size(), "Should have orders in 3 months");
         assertTrue(byMonth.containsKey(YearMonth.of(2024, 1)));
@@ -177,11 +177,11 @@ class StreamHomeworkTest {
     void testGetOrdersInDateRange() {
         LocalDate start = LocalDate.of(2024, 2, 1);
         LocalDate end = LocalDate.of(2024, 2, 28);
-        List<Order> orders = hw.getOrdersInDateRange(start, end);
+        List<CustomerOrder> orders = hw.getOrdersInDateRange(start, end);
         assertNotNull(orders);
         assertEquals(3, orders.size());
         
-        for (Order order : orders) {
+        for (CustomerOrder order : orders) {
             assertFalse(order.orderDate().isBefore(start));
             assertFalse(order.orderDate().isAfter(end));
         }
