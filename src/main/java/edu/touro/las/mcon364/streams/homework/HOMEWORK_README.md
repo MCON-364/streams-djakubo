@@ -1,6 +1,5 @@
 # Homework: E-Commerce Order Analytics
 
-**Time:** ~2 hours  
 **File:** `StreamHomework.java`
 
 ## Overview

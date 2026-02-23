@@ -30,8 +30,8 @@ class StreamHomeworkTest {
     @DisplayName("1.1: getTotalRevenue calculates correctly")
     void testGetTotalRevenue() {
         double revenue = hw.getTotalRevenue();
-        assertTrue(revenue > 5000, "Revenue should be greater than $5000");
-        assertTrue(revenue < 6000, "Revenue should be less than $6000");
+        assertTrue(revenue > 6000, "Revenue should be greater than $6000");
+        assertTrue(revenue < 7000, "Revenue should be less than $7000");
     }
     
     @Test
