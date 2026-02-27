@@ -84,8 +84,11 @@ public class StreamExercise {
      * Example: calculateAverage("Unknown") -> 0.0
      */
     public double calculateAverage(String studentName) {
-        return gradebook.get(studentName).stream().mapToInt(Integer::intValue)
-                .average().orElse(0.0);
+        return Optional.ofNullable(gradebook.get(studentName))
+                .orElse(List.of())
+                .stream().mapToInt(Integer::intValue)
+                .average()
+                .orElse(0.0);
     }
     
     /**
@@ -169,10 +172,13 @@ public class StreamExercise {
      *   "F" -> [Frank]
      * }
      */
+
+
     public Map<String, List<String>> groupByPerformance() {
-        // TODO: Implement using streams
-        // Hint: Use Collectors.groupingBy() with a classifier function
-        return null;
+        return gradebook.keySet().stream().collect(
+                Collectors.groupingBy(s -> getLetterGrade(calculateAverage(s)),
+                        Collectors.toList()));
+
     }
     
     /**
@@ -181,9 +187,8 @@ public class StreamExercise {
      * Expected: {Alice=90.6, Bob=78.8, Carol=95.8, ...}
      */
     public Map<String, Double> getStudentAverages() {
-        // TODO: Implement using streams
-        // Hint: Use Collectors.toMap() with a value mapper that calculates average
-        return null;
+        return gradebook.keySet().stream().collect(Collectors.toMap(
+                s->s, this::calculateAverage));
     }
     
     /**
@@ -192,9 +197,9 @@ public class StreamExercise {
      * Expected output: "Grace" (average 97.8)
      */
     public String findTopPerformer() {
-        // TODO: Implement using streams
-        // Hint: Use max() with a comparator based on average
-        return null;
+        return gradebook.keySet().stream().max(Comparator.comparingDouble(
+                this::calculateAverage)).orElse(null);
+
     }
 
     // =========================================================================

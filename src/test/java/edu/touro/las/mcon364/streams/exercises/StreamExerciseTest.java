@@ -69,7 +69,8 @@ class StreamExerciseTest {
     @Test
     @DisplayName("2.1: calculateAverage returns 0 for unknown student")
     void testCalculateAverageUnknown() {
-        assertEquals(0.0, exercise.calculateAverage("Unknown"), 0.001);
+        assertEquals(0.0, exercise.calculateAverage(
+                "Unknown"), 0.001);
     }
     
     @Test
