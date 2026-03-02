@@ -226,9 +226,6 @@ public class StreamHomework {
      * Expected includes: {C001=1509.93, C002=899.97, ...}
      */
     public Map<String, Double> getRevenueByCustomer() {
-        // TODO: Implement using streams
-        // Hint: Filter delivered, group by customerId, sum totals
-
         return customerOrders.stream().filter(s -> s.status == OrderStatus.DELIVERED)
                 .collect(Collectors.groupingBy(CustomerOrder::customerId,
                         Collectors.summingDouble(CustomerOrder::getTotal)));
@@ -242,9 +239,11 @@ public class StreamHomework {
      * Example: getTopCustomers(3) -> [C004, C001, C006] (or similar based on data)
      */
     public List<String> getTopCustomers(int n) {
-        // TODO: Implement using streams
-        // Hint: Use getRevenueByCustomer(), sort by value descending, limit
-        return null;
+        return getRevenueByCustomer().entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .limit(n)
+                .map(Map.Entry::getKey)
+                .toList();
     }
     
     /**
@@ -253,9 +252,8 @@ public class StreamHomework {
      * Returns: Map of customerId → number of orders placed
      */
     public Map<String, Long> getCustomerOrderCounts() {
-        // TODO: Implement using streams
-        // Hint: Group by customerId, count
-        return null;
+        return customerOrders.stream().collect(Collectors.groupingBy(
+                CustomerOrder::customerId, Collectors.counting()));
     }
     
     /**
@@ -264,9 +262,9 @@ public class StreamHomework {
      * Expected: [C001, C002, C003, C006]
      */
     public List<String> getCustomersWithMultipleOrders() {
-        // TODO: Implement using streams
-        // Hint: Use getCustomerOrderCounts(), filter count > 1
-        return null;
+        return getCustomerOrderCounts().entrySet().stream()
+                .filter(s ->s.getValue()>1)
+                .map(entry -> entry.getKey()).toList();
     }
     
     // =========================================================================
@@ -281,9 +279,12 @@ public class StreamHomework {
      * Expected includes: {Electronics=4599.91, Clothing=209.95, ...}
      */
     public Map<String, Double> getRevenueByCategory() {
-        // TODO: Implement using streams
-        // Hint: Filter delivered, flatMap to items, group by category
-        return null;
+
+        return customerOrders.stream()
+                .filter(s -> s.status == OrderStatus.DELIVERED)
+                .flatMap(CustomerOrder -> CustomerOrder.items.stream())
+                .collect(Collectors.groupingBy(item ->item.product.category,
+                        Collectors.summingDouble(item -> item.quantity*item.product.price)));
     }
     
     /**
