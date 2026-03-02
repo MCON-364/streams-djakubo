@@ -2,6 +2,7 @@ package edu.touro.las.mcon364.streams.homework;
 
 import java.time.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Homework: E-Commerce Order Analytics
@@ -179,9 +180,8 @@ public class StreamHomework {
      * Expected: ~5765.87
      */
     public double getTotalRevenue() {
-        // TODO: Implement using streams
-        // Hint: Filter by DELIVERED status, then sum order totals
-        return 0.0;
+        return customerOrders.stream().filter( s -> s.status == OrderStatus.DELIVERED)
+                    .mapToDouble(CustomerOrder::getTotal).sum();
     }
     
     /**
@@ -190,8 +190,8 @@ public class StreamHomework {
      * Example: getOrderCount(DELIVERED) -> 5
      */
     public long getOrderCount(OrderStatus status) {
-        // TODO: Implement using streams
-        return 0;
+        return customerOrders.stream().filter(s -> s.status == status)
+                .count();
     }
     
     /**
@@ -200,9 +200,8 @@ public class StreamHomework {
      * Returns a Set of all products that appear in any order.
      */
     public Set<Product> getUniqueProducts() {
-        // TODO: Implement using streams
-        // Hint: Use flatMap to get all OrderItems, then map to Product
-        return null;
+        return customerOrders.stream().flatMap(order -> order.items.stream())
+                .map(OrderItem::product).collect(Collectors.toSet());
     }
     
     /**
@@ -211,9 +210,8 @@ public class StreamHomework {
      * Expected: ~1153.17
      */
     public double getAverageOrderValue() {
-        // TODO: Implement using streams
-        // Hint: Filter delivered orders, map to total, get average
-        return 0.0;
+        return customerOrders.stream().filter(s -> s.status == OrderStatus.DELIVERED)
+                .mapToDouble(CustomerOrder::getTotal).average().getAsDouble();
     }
     
     // =========================================================================
@@ -230,7 +228,10 @@ public class StreamHomework {
     public Map<String, Double> getRevenueByCustomer() {
         // TODO: Implement using streams
         // Hint: Filter delivered, group by customerId, sum totals
-        return null;
+
+        return customerOrders.stream().filter(s -> s.status == OrderStatus.DELIVERED)
+                .collect(Collectors.groupingBy(CustomerOrder::customerId,
+                        Collectors.summingDouble(CustomerOrder::getTotal)));
     }
     
     /**
